@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'visitor',
+    'visit',
+    'temperature_measurement',
 ]
 
 MIDDLEWARE = [
@@ -93,8 +96,12 @@ WSGI_APPLICATION = 'park_control_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'park_control',
+        'USER': 'sebastian',
+        'PASSWORD': 'Sebas1007',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
