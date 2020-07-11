@@ -3,6 +3,7 @@ from visitor.models import Visitor
 
 # Create your models here.
 class Visit(models.Model):
+    date_visit = models.DateTimeField(auto_now = False, auto_now_add=True, blank=True, null=True)
     entry_hour = models.TimeField()
     exit_hour = models.TimeField()
     allowed = models.BooleanField()

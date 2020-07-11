@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'visitor',
     'visit',
-    'temperature_measurement',
+    'temperature_measure',
 ]
 
 MIDDLEWARE = [
@@ -97,10 +97,10 @@ WSGI_APPLICATION = 'park_control_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'park_control',
-        'USER': 'sebastian',
-        'PASSWORD': 'Sebas1007',
-        'HOST': '127.0.0.1',
+        'NAME': 'dbpark',
+        'USER': 'postgres',
+        'PASSWORD': 'admin2020',
+        'HOST': 'database-2.c22acjcbtp74.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
