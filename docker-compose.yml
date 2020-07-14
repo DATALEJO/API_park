@@ -5,8 +5,8 @@ services:
     build: .
     container_name: api_park
     ports:
-      - '8000:80'
-      - '3500:3500'
-      - '8006:81'
+      - '8005:80'
+      - '3600:3500'
+      - '8001:81'
     volumes: 
       - ./www:/var/www/html

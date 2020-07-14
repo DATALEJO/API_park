@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 #ENV PYTHONUNBUFFERED 1
 RUN apt-get install -y apt-utils vim curl apache2 apache2-utils
-RUN apt-get -y install python3.7.7 libapache2-mod-wsgi-py3
+RUN apt-get -y install python3.7 libapache2-mod-wsgi-py3
 RUN apt-get install nano
 #RUN apt-get install ps
 RUN ln /usr/bin/python3 /usr/bin/python
