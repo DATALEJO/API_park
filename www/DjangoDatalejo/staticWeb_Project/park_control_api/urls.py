@@ -22,4 +22,7 @@ urlpatterns = [
     # path('^api-auth/', include('rest_framework.urls')),
     path('auth/obtain_token/', obtain_jwt_token),
     path('auth/refresh_token/', refresh_jwt_token),
+    path('api/v1.0/',include('visitor.urls')),
+    path('api/v1.0/',include('visit.urls')),
+    path('api/v1.0/',include('temperature_measure.urls')),
 ]
