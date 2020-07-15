@@ -1,0 +1,55 @@
+serializer
+
+from rest_framework import serializers
+from .models import Visitor
+
+class VisitorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visitor
+        fields = '__all__'
+
+
+urls
+
+from rest_framework import routers
+
+from .views import VisitorViewSet
+
+router = routers.SimpleRouter()
+router.register('visitors', VisitorViewSet)
+
+urlpatterns = router.urls
+
+
+views
+
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+from rest_framework import viewsets
+from .serializers import VisitorSerializer
+from .models import Visitor 
+
+# Create your views here.
+class VisitorViewSet(viewsets.ModelViewSet):
+    queryset = Visitor.objects.all()
+    serializer_class = VisitorSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+url_main
+
+path('api/v1.0/',include('visitor.urls')),
+
+
+
+
+http://127.0.0.1:8000/api/v1.0/visitors/
+
+curl -X POST -d "username=armando&password=12345" http://localhost:8000/auth/obtain_token/
+
+
+curl -X GET -H  "Authorization: Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFybWFuZG8iLCJleHAiOjE1OTQ4MzIyMDAsImVtYWlsIjoiaWNnYXJtYW5kb0Bob3RtYWlsLmNvbSIsIm9yaWdfaWF0IjoxNTk0NzQ1ODAwfQ.T7hx63qOX7oHGvggr5ibMMqGkSz-yqmIO7OEt8PqdP0" http://127.0.0.1:8000/api/v1.0/visitors/
+
+curl -X POST http://127.0.0.1:8000/api/v1.0/visitors/ -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFybWFuZG8iLCJleHAiOjE1OTQ4MzI1MjIsImVtYWlsIjoiaWNnYXJtYW5kb0Bob3RtYWlsLmNvbSIsIm9yaWdfaWF0IjoxNTk0NzQ2MTIyfQ.E5Fyh5fExh-FzQYCG3IO3Scb_nhEnHvkEkIvY_O79Y0" -H "Content-Type: application/json"
+
+
+curl -X POST -d "username=admin&password=password123" http://localhost:8000/api-token-auth/
