@@ -13,4 +13,4 @@ class Visitor(models.Model):
     is_active = models.BooleanField()
     created_at = models.DateTimeField(auto_now = False, auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now = True)
-    user_resgister = models.IntegerField(default=0)
+    user_register = models.IntegerField(default=0)
