@@ -4,7 +4,10 @@ from . import views as viewsVisitors
 from .views import VisitorViewSet
 
 urlpatterns = [
-    path('visitor/create/', viewsVisitors.VisitorView.as_view())
+    path('visitor/create/', viewsVisitors.VisitorView.as_view()),
+    path('visitor/total/', viewsVisitors.CountVisitorView.as_view()),
+    path('visitor/denied/', viewsVisitors.CountVisitorDeniedView.as_view()),
+    path('visitor/permited/', viewsVisitors.CountVisitorPermitedView.as_view()),
 ]
 
 router = routers.SimpleRouter()
