@@ -66,7 +66,7 @@ class CountVisitorView(APIView):
 class CountVisitorDeniedView(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request, format=None):
-        visitors_d = Visit.objects.select_related('visitor').filter(is_active='False').filter(visitor__allowed='False').count()
+        visitors_d = Visit.objects.select_related('visitor').filter(is_active='False').count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
         return JsonResponse({'response':visitors_d}, safe=False, status=200)
 
