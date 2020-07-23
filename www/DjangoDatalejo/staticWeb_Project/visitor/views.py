@@ -75,7 +75,7 @@ class CountVisitorPermitedView(APIView):
     def get(self, request, format=None):
         visitors_p = Visit.objects.select_related('visitor').filter(is_active='True').count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
-        return JsonResponse({'response':visitors_d}, safe=False, status=200)
+        return JsonResponse({'response':visitors_p}, safe=False, status=200)
         
 class VisitorViewSet(viewsets.ModelViewSet):
     queryset = Visitor.objects.all()
