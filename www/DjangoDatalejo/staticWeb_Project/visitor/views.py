@@ -12,7 +12,7 @@ from functools import reduce
 
 
 class VisitorView(APIView):
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
         data_insert = request.data
         # Inserta el visitante
@@ -57,18 +57,21 @@ class VisitorView(APIView):
         return JsonResponse({'response':'El usuario fue insertado'}, safe=False, status=201)
     
 class CountVisitorView(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, format=None):
         visitors = Visitor.objects.all().count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
         return JsonResponse({'response':visitors}, safe=False, status=200)
 
 class CountVisitorDeniedView(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, format=None):
         visitors_d = Visit.objects.select_related('visitor').filter(is_active='False').filter(visitor__allowed='False').count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
         return JsonResponse({'response':visitors_d}, safe=False, status=200)
 
 class CountVisitorPermitedView(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, format=None):
         visitors_p = Visit.objects.select_related('visitor').filter(is_active='True').count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
@@ -80,6 +83,7 @@ class VisitorViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
 class VisitorAverageAge(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, format=None):
         visitors = list(Visitor.objects.filter(is_active=True).values('birthdate'))
         visitors_clean = [v['birthdate'] for v in visitors if v['birthdate'] != None]

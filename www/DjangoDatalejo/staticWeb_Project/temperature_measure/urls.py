@@ -1,8 +1,12 @@
+from django.urls import path
 from rest_framework import routers
+from . import views
 
-from .views import Temperature_MeasureViewSet
+urlpatterns = [
+    path('temperature-measure/last_five/', views.TemperatureLastMeasures.as_view()),
+]
 
 router = routers.SimpleRouter()
-router.register('temperature-measures', Temperature_MeasureViewSet)
+router.register('temperature-measures', views.Temperature_MeasureViewSet)
 
-urlpatterns = router.urls
+urlpatterns += router.urls
