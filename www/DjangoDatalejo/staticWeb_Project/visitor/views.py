@@ -5,8 +5,9 @@ from .serializers import VisitorSerializer
 from rest_framework.views import APIView
 from .models import Visitor 
 from visit.models import Visit
-import json
+import json, datetime
 from django.core.serializers.json import DjangoJSONEncoder
+from functools import reduce
 
 
 
@@ -63,19 +64,39 @@ class CountVisitorView(APIView):
 
 class CountVisitorDeniedView(APIView):
     def get(self, request, format=None):
-        visitors_d = Visit.objects.select_related('visitor').count()
+        visitors_d = Visit.objects.select_related('visitor').filter(is_active='False').filter(visitor__allowed='False').count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
         return JsonResponse({'response':visitors_d}, safe=False, status=200)
 
 class CountVisitorPermitedView(APIView):
     def get(self, request, format=None):
-        visitors_d = Visit.objects.select_related('visitor').count()
+        visitors_p = Visit.objects.select_related('visitor').filter(is_active='True').count()
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
         return JsonResponse({'response':visitors_d}, safe=False, status=200)
         
-
-
 class VisitorViewSet(viewsets.ModelViewSet):
     queryset = Visitor.objects.all()
     serializer_class = VisitorSerializer
     permission_classes = (IsAuthenticated,)
+
+class VisitorAverageAge(APIView):
+    def get(self, request, format=None):
+        visitors = list(Visitor.objects.filter(is_active=True).values('birthdate'))
+        visitors_clean = [v['birthdate'] for v in visitors if v['birthdate'] != None]
+        today = datetime.date.today()
+        current_year = today.year
+        current_month = today.month
+        current_day = today.day
+        list_years = [] 
+        for date_i in visitors_clean:
+            year_tmp = current_year-date_i.year
+            if current_month >= date_i.month :
+                if current_day < date_i.day:
+                    year_tmp-=1
+            else:
+                year_tmp-=1
+            if year_tmp > 0:
+                list_years.append(year_tmp)
+        promedio = reduce(lambda x, y: x + y, list_years) / len(list_years)
+        return JsonResponse({'response':'%.2f'%(promedio)}, safe=False, status=200)
+

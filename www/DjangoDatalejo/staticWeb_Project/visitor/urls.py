@@ -8,6 +8,7 @@ urlpatterns = [
     path('visitor/total/', viewsVisitors.CountVisitorView.as_view()),
     path('visitor/denied/', viewsVisitors.CountVisitorDeniedView.as_view()),
     path('visitor/permited/', viewsVisitors.CountVisitorPermitedView.as_view()),
+    path('visitor/avg_age/', viewsVisitors.VisitorAverageAge.as_view()),
 ]
 
 router = routers.SimpleRouter()
