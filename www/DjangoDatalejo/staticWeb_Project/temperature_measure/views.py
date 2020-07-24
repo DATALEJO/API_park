@@ -17,4 +17,8 @@ class TemperatureLastMeasures(APIView):
         temp_measures = list(Temperature_Measure.objects.filter(is_active=True).order_by('-id')[:5].values())
         # result = json.dumps(list(visitors), cls=DjangoJSONEncoder)
         list_temp = [lt['value'] for lt in temp_measures]
+        if len(list_temp) < 5:
+            l_list = 5 - len(list_temp)
+            listofzeroz = [0]*l_list
+            list_temp+=listofzeroz
         return JsonResponse({'response':list_temp}, safe=False, status=200)
