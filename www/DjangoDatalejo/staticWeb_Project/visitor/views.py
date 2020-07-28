@@ -5,7 +5,9 @@ from .serializers import VisitorSerializer
 from rest_framework.views import APIView
 from .models import Visitor 
 from visit.models import Visit
+from temperature_measure.models import Temperature_Measure
 import json, datetime
+from datetime import date
 from django.core.serializers.json import DjangoJSONEncoder
 from functools import reduce
 
@@ -13,18 +15,21 @@ from functools import reduce
 
 class VisitorView(APIView):
     permission_classes = (IsAuthenticated,)
+    #today = date.today().strftime("%d/%m/%Y")
+    
     def post(self, request, format=None):
         data_insert = request.data
         # Inserta el visitante
-        name_r = data_insert['name']
-        read_type_r = data_insert['read_type']
-        cedula_r = data_insert['cedula']
-        email_r = data_insert['email']
-        covid_contact_r = data_insert['covid_contact']
-        birthdate_r = data_insert['birthdate']
-        gender_r = data_insert['gender']
-        address_r = data_insert['address']
-        is_active_r = data_insert['is_active']
+        data_insert_visitor = data_insert['visitor']
+        name_r = data_insert_visitor['name']
+        read_type_r = data_insert_visitor['read_type']
+        cedula_r = data_insert_visitor['cedula']
+        email_r = data_insert_visitor['email']
+        covid_contact_r = data_insert_visitor['covid_contact']
+        birthdate_r = data_insert_visitor['birthdate']
+        gender_r = data_insert_visitor['gender']
+        address_r = data_insert_visitor['address']
+        is_active_r = data_insert_visitor['is_active']
         visitor = Visitor.objects.create(
             name = name_r,
             read_type = read_type_r,
@@ -36,25 +41,37 @@ class VisitorView(APIView):
             address = address_r,
             is_active = is_active_r
         )
-
-        # Inserta la visita
+        visitor.save()
+        now = datetime.datetime.now()
+        date_now = now.strftime("%Y-%m-%d %H:%M:%S")    
+        #Inserta la visita
         data_insert_visit = data_insert['visit']
         visitor_id = visitor.id
         entry_hour_r = data_insert_visit['entry_hour']
         exit_hour_r = data_insert_visit['exit_hour']
         allowed_r = data_insert_visit['allowed']
         is_active_v_r = data_insert_visit['is_active']
-        date_visit_r = data_insert_visit['date_visit']
         visit = Visit.objects.create(
             entry_hour = entry_hour_r,
             exit_hour = exit_hour_r,
             allowed = allowed_r,
             is_active = is_active_v_r,
-            date_visit = date_visit_r,
+            date_visit = date_now,
             visitor_id = visitor_id
         )
-        visitor.save()
-        return JsonResponse({'response':'El usuario fue insertado'}, safe=False, status=201)
+        visit.save()
+        #Inserta la temperatura
+        visit_id = visit.id
+        data_insert_t_measure = data_insert['temperature_measure']
+        tempereature_measure = Temperature_Measure.objects.create(
+            value = data_insert_t_measure['value'],
+            is_active = True,
+            visit_id = visit_id,
+            id_file = data_insert_t_measure['id_file']
+        )
+        tempereature_measure.save()
+        return JsonResponse({'response':'La información fue registrada'}, safe=False, status=201)
+        # return JsonResponse({'now':date_now}, safe=False, status=201)
     
 class CountVisitorView(APIView):
     permission_classes = (IsAuthenticated,)

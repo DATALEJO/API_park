@@ -1,5 +1,6 @@
 from django.db import models
 from visitor.models import Visitor
+import datetime
 
 # Create your models here.
 class Visit(models.Model):
