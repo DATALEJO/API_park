@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from .models import Visitor 
 from visit.models import Visit
 from temperature_measure.models import Temperature_Measure
-import json, datetime
+import json, datetime, pytz
 from datetime import date
 from django.core.serializers.json import DjangoJSONEncoder
 from functools import reduce
@@ -29,7 +29,6 @@ class VisitorView(APIView):
         birthdate_r = data_insert_visitor['birthdate']
         gender_r = data_insert_visitor['gender']
         address_r = data_insert_visitor['address']
-        is_active_r = data_insert_visitor['is_active']
         visitor = Visitor.objects.create(
             name = name_r,
             read_type = read_type_r,
@@ -39,23 +38,24 @@ class VisitorView(APIView):
             birthdate = birthdate_r,
             gender = gender_r,
             address = address_r,
-            is_active = is_active_r
+            is_active = True
         )
         visitor.save()
-        now = datetime.datetime.now()
-        date_now = now.strftime("%Y-%m-%d %H:%M:%S")    
+        tz = pytz.timezone('America/Bogota')
+        now = datetime.datetime.now(tz=tz)
+        date_now = now.strftime("%Y-%m-%d %H:%M:%S")
+        hour_now = now.strftime("%H:%M:%S")
         #Inserta la visita
         data_insert_visit = data_insert['visit']
         visitor_id = visitor.id
-        entry_hour_r = data_insert_visit['entry_hour']
-        exit_hour_r = data_insert_visit['exit_hour']
+        entry_hour_r = hour_now
+        exit_hour_r = hour_now
         allowed_r = data_insert_visit['allowed']
-        is_active_v_r = data_insert_visit['is_active']
         visit = Visit.objects.create(
             entry_hour = entry_hour_r,
             exit_hour = exit_hour_r,
             allowed = allowed_r,
-            is_active = is_active_v_r,
+            is_active = True,
             date_visit = date_now,
             visitor_id = visitor_id
         )
